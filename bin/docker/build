@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# if cd deps/UnrealEngine; then
+  # git pull
+  # cd ../..
+# else
+  # git clone https://github.com/EpicGames/UnrealEngine deps/UnrealEngine
+# fi
+
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+  os=`cat /etc/*release | grep ^NAME`
+  if echo $os | grep Ubuntu; then
+    OS_ARGS=
+  elif echo $os | grep CentOS; then
+    OS_ARGS=
+  fi
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+  OS_ARGS="--build-arg http_proxy=http://docker.for.mac.localhost:7769 --build-arg https_proxy=https://docker.for.mac.localhost:7769"
+fi
+
+sudo docker build -t ucbdrive/carla:dev $OS_ARGS --build-arg OAUTH_TOKEN=$1 .

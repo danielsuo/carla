@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# SOURCE: http://blog.yohanliyanage.com/2015/05/docker-clean-up-after-yourself/
+
+# Stop / remove all containers
+sudo docker stop $(sudo docker ps -a -q)
+sudo docker rm $(sudo docker ps -a -q)
+
+# Make sure exited containers are deleted
+sudo docker rm -v $(sudo docker ps -a -q -f status=exited)
+
+# Remove unwanted dangling images
+sudo docker rmi $(sudo docker images -f "dangling=true" -q)
+
+# Clean up vfs
+sudo docker volume rm $(sudo docker volume ls -qf dangling=true)
